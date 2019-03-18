@@ -3,7 +3,7 @@ import service
 
 def options(number):
     switcher = {
-        1: service.CreateInitialScript(""),
+        1: service.InitialTemplate(),
         2: service.DownloadData,
         3: service.MakeSubmission,
         4: service.ReadSettings,
@@ -16,3 +16,5 @@ def options(number):
 text = input("What do you want? 1-6")
 
 options(text)
+
+exit

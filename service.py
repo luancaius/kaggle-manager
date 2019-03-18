@@ -1,23 +1,29 @@
-def SendEmail(to, body):
-    print("Sending email")
+import kaggle
+import os
 
 
-def ReadSettings(path):
-    print("Reading configuration")
+class Service:
 
+    def __init__(self):
+        self.path = '../../Kaggle'
 
-def DownloadData(competition):
-    print("Download data")
+    def SendEmail(to, body):
+        print("Sending email")
 
+    def ReadSettings(path):
+        print("Reading configuration")
 
-def CreateInitialScript(type):
-    print("Creating initial scripts")
+    def DownloadData(competition):
+        print("Download data")
 
+    def InitialTemplate():
+        compName = input("Type Kaggle competition name:")
+        command = 'kaggle competitions download ' + compName+' '+self.path
+        os.system(command)
 
-def MakeSubmission(competition):
-    print("Making submission")
+    def MakeSubmission(competition):
+        print("Making submission")
 
-
-def RunScript(scriptPath, settings):
-    print("Running script")
-    pass
+    def RunScript(scriptPath, settings):
+        print("Running script")
+        pass
