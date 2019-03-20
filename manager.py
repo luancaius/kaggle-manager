@@ -1,20 +1,18 @@
-import service
+from service import Service
 
 
 def options(number):
-    switcher = {
-        1: service.InitialTemplate(),
-        2: service.DownloadData,
-        3: service.MakeSubmission,
-        4: service.ReadSettings,
-        5: service.RunScript,
-        6: service.SendEmail,
-    }
-    switcher[number]()
+    service = Service()
+    if number == 1:
+        service.InitCompetition()
+    elif number == 2:
+        service.MakeSubmission()
+    else:
+        service.RunScript()
 
 
 text = input("What do you want? 1-6")
 
-options(text)
+options(int(text))
 
 exit

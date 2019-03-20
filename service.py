@@ -1,5 +1,4 @@
-import kaggle
-import os
+import util
 
 
 class Service:
@@ -7,23 +6,21 @@ class Service:
     def __init__(self):
         self.path = '../../Kaggle'
 
-    def SendEmail(to, body):
-        print("Sending email")
+    def DownloadData(self, compName):
+        print("Downloading data")
+        self.newPath = self.path+'/'+compName
+        util.createDir(self.newPath)
+        command = 'kaggle competitions download ' + compName+' -p '+self.newPath
+        util.execute(command)
 
-    def ReadSettings(path):
-        print("Reading configuration")
-
-    def DownloadData(competition):
-        print("Download data")
-
-    def InitialTemplate():
-        compName = input("Type Kaggle competition name:")
-        command = 'kaggle competitions download ' + compName+' '+self.path
-        os.system(command)
-
-    def MakeSubmission(competition):
+    def CreateFirstScript(self, competition):
         print("Making submission")
 
-    def RunScript(scriptPath, settings):
+    def InitCompetition(self):
+        compName = input("Type Kaggle competition name:")
+        self.DownloadData(compName)
+        self.CreateFirstScript(self.newPath)
+
+    def RunScript(self, scriptPath, settings):
         print("Running script")
         pass
