@@ -13,14 +13,21 @@ class Service:
         command = 'kaggle competitions download ' + compName+' -p '+self.newPath
         util.execute(command)
 
-    def CreateFirstScript(self, competition):
-        print("Making submission")
-
+    def CreateFirstScript():
+        print("Creating first script")
+        
     def InitCompetition(self):
         compName = input("Type Kaggle competition name:")
         self.DownloadData(compName)
         self.CreateFirstScript(self.newPath)
 
-    def RunScript(self, scriptPath, settings):
+
+    def MakeSubmission(self, competition):
+        print("Making submission")
+
+    def RunAndScore(self):
+        self.PreparingData()
+        self.
         print("Running script")
+
         pass

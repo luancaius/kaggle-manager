@@ -6,9 +6,9 @@ def options(number):
     if number == 1:
         service.InitCompetition()
     elif number == 2:
-        service.MakeSubmission()
-    else:
-        service.RunScript()
+        score = service.RunAndScore()
+        print(score)
+  
 
 
 text = input("What do you want? 1-6")
