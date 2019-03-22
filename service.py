@@ -21,13 +21,23 @@ class Service:
         self.DownloadData(compName)
         self.CreateFirstScript(self.newPath)
 
+    def PreparingData(self):
+        print("Preparing data")
 
-    def MakeSubmission(self, competition):
-        print("Making submission")
+    def TrainingAndTuning(self):
+        print("Training and Tuning")
+
+    def CreateSubmissionFile(self):
+        print("Create submission")
+
+    def UploadSubmission(self):
+        print("Upload submission")
+        return 10
 
     def RunAndScore(self):
         self.PreparingData()
-        self.
-        print("Running script")
-
-        pass
+        self.TrainingAndTuning()
+        self.CreateSubmissionFile()
+        score = self.UploadSubmission()
+        return score
+        

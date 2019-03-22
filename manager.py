@@ -9,9 +9,7 @@ def options(number):
         score = service.RunAndScore()
         print(score)
   
-
-
-text = input("What do you want? 1-6")
+text = input("What do you want? 1-2")
 
 options(int(text))
 
