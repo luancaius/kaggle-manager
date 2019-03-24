@@ -4,22 +4,33 @@ import util
 class Service:
 
     def __init__(self):
-        self.path = '../../Kaggle'
+        self.rootPath = '../../Kaggle'
 
-    def DownloadData(self, compName):
+    def DownloadData(self):
         print("Downloading data")
-        self.newPath = self.path+'/'+compName
-        util.createDir(self.newPath)
-        command = 'kaggle competitions download ' + compName+' -p '+self.newPath
+        util.createDir(self.path)
+        self.path_data = self.path+'/data'
+        util.createDir(self.path_data)
+        command = 'kaggle competitions download ' + \
+            self.compName + ' -p '+self.path_data
         util.execute(command)
 
-    def CreateFirstScript():
-        print("Creating first script")
-        
+    def CreateScripts(self):
+        print("Creating scripts")
+        self.path_script = self.path+'/script'
+        util.createDir(self.path_script)
+        self.path_submission = self.path+'/submission'
+        util.createDir(self.path_submission)
+        util.copyFileTo('templates', 'prepareData.txt', self.path_script)
+        util.copyFileTo('templates', 'trainingAndTuning.txt', self.path_script)
+        util.copyFileTo('templates', 'createSubmission.txt', self.path_script)
+
     def InitCompetition(self):
         compName = input("Type Kaggle competition name:")
-        self.DownloadData(compName)
-        self.CreateFirstScript(self.newPath)
+        self.compName = compName
+        self.path = self.rootPath+'/'+compName
+        # self.DownloadData()
+        self.CreateScripts()
 
     def PreparingData(self):
         print("Preparing data")
@@ -40,4 +51,3 @@ class Service:
         self.CreateSubmissionFile()
         score = self.UploadSubmission()
         return score
-        
