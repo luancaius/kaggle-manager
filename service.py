@@ -5,6 +5,9 @@ class Service:
 
     def __init__(self):
         self.rootPath = '../../Kaggle'
+        self.filesToCopy = ['util.txt', 'main.txt', 'prepareData.txt',
+                            'training.txt', 'tuning.txt', 'submission.txt']
+        self.templatesFolder = 'templates'
 
     def DownloadData(self):
         print("Downloading data")
@@ -21,15 +24,14 @@ class Service:
         util.createDir(self.path_script)
         self.path_submission = self.path+'/submission'
         util.createDir(self.path_submission)
-        util.copyFileTo('templates', 'prepareData.txt', self.path_script)
-        util.copyFileTo('templates', 'trainingAndTuning.txt', self.path_script)
-        util.copyFileTo('templates', 'createSubmission.txt', self.path_script)
+        for filename in self.filesToCopy:
+            util.copyFileTo(self.templatesFolder, filename, self.path_script)
 
     def InitCompetition(self):
         compName = input("Type Kaggle competition name:")
         self.compName = compName
         self.path = self.rootPath+'/'+compName
-        # self.DownloadData()
+        self.DownloadData()
         self.CreateScripts()
 
     def PreparingData(self):

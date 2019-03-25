@@ -1,0 +1,56 @@
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import KFold
+from sklearn.metrics import f1_score
+import numpy as np
+
+
+def predict_labels(clf, features, target):
+    y_pred = clf.predict(features)
+    return f1_score(target, y_pred)
+
+
+def tuning(clf, features, target, score):
+    params = {}
+    clfName = clf.__class__.__name__
+    if clfName == "DecisionTreeClassifier":
+        params = {
+            'min_samples_leaf': np.linspace(0.1, 0.5, 5, endpoint=True),
+            'max_features': list(range(1, features.shape[1])),
+            'min_samples_split': np.linspace(0.1, 1.0, 10, endpoint=True)
+        }
+
+    if clfName == "LogisticRegression":
+        params = {'class_weight': ['balanced'],
+                  'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000],
+                  'penalty': ['l1', 'l2']
+                  }
+
+    if clfName == "SGDClassifier":
+        params = {
+            'max_iter': [250, 500, 1000],
+            'loss': ['log'],
+        }
+    if clfName == "RandomForestClassifier":
+        params = {
+            'bootstrap': [True, False],
+            'max_depth': [10, 50, 100, None],
+            'max_features': ['auto', 'sqrt'],
+            'min_samples_leaf': [1, 2, 4],
+            'min_samples_split': [2, 5, 10],
+            'n_estimators': [200, 600, 1200, 1800]
+        }
+    if clfName == "XGBClassifier":
+        params = {
+            'max_depth': [4, 5, 6],
+            'min_child_weight': [4, 5, 6],
+            'gamma': [i/10.0 for i in range(0, 5)],
+            'subsample': [i/100.0 for i in range(75, 90, 5)],
+            'colsample_bytree': [i/100.0 for i in range(75, 90, 5)]
+        }
+    if params == {}:
+        return clf
+
+    modelTunned = GridSearchCV(clf, params, cv=4)
+    modelTunned.fit(features, target)
+    scoreTunned = predict_labels(modelTunned, features, target)
+    return modelTunned if scoreTunned > score else clf

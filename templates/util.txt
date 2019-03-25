@@ -1,0 +1,14 @@
+import numpy as np
+
+
+def replacingMissingValues(dataset):
+    col = dataset.columns
+    for i in col:
+        if dataset[i].isnull().sum() > 0:
+            dataset[i].fillna(np.mean(dataset[i]), inplace=True)
+    return dataset
+
+
+def dropColumns(data, dropColumns):
+    features = data.drop(dropColumns, axis=1)
+    return features

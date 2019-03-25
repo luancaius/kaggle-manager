@@ -1,0 +1,24 @@
+import prepareData as prep
+import training as train
+import tuning as tune
+import submission as sub
+
+inputTrain = '../data/train.csv'
+inputTest = '../data/test.csv'
+submissionFolder = '../submission'
+targetInput = 'Survived'
+columnId = 'PassengerId'
+
+print("preparing data")
+features, target = prep.prepare_train(inputTrain, targetInput)
+print("training")
+print(features)
+print(target)
+model, score = train.training(features, target)
+# print("tuning")
+#model = tune.tuning(model, features, target, score)
+print("prepare test")
+features_test, test_input = prep.prepare_test(inputTest, targetInput)
+print("submission")
+sub.submission_test_id(test_input, model,
+                       model.__class__.__name__, features_test, columnId, targetInput, submissionFolder)

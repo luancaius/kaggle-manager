@@ -1,0 +1,15 @@
+import numpy as np
+import pandas as pd
+
+
+def submission_test_full(inputTest, clf, clfName, features, folder):
+    submission = pd.DataFrame({"Id": inputTest.Id.values})
+    submission["target"] = clf.predict(features)
+    submission.to_csv(folder+'/submit_{}.csv'.format(clfName), index=False)
+
+
+def submission_test_id(inputTest, clf, clfName, features, columnsId, columnTarget, folder):
+    sub = pd.DataFrame(inputTest[columnsId], columns=[columnsId, columnTarget])
+    pred = clf.predict(features)
+    sub[columnTarget] = pred
+    sub.to_csv(folder+'/submit_{}.csv'.format(clfName), index=False)

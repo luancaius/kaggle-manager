@@ -1,1 +1,43 @@
-# prepare data
+import pandas as pd
+import numpy as np
+import util
+
+
+def customPreparation_titanic(data, target):
+    columns = ['PassengerId', 'Name', 'Ticket', 'Cabin']
+    if target in data.columns:
+        columns.append(target)
+    features = util.dropColumns(data, columns)
+    features['Sex'] = features['Sex'] == 'male'
+    features['Age'] = features['Age']*365
+    features['Embarked'] = features['Embarked'].astype("category").cat.codes
+    util.replacingMissingValues(features)
+    return features
+
+
+def customPreparation(data):
+    features = util.dropColumns(data, ['Id'])
+    util.replacingMissingValues(features)
+    return features
+
+
+def getFeatures(data, target):
+    features = customPreparation_titanic(data, target)
+    return features
+
+
+def getTarget(data, target):
+    return data[target]
+
+
+def prepare_train(data_path, targetInput):
+    train = pd.read_csv(data_path)
+    target = getTarget(train, targetInput)
+    features = getFeatures(train, targetInput)
+    return features, target
+
+
+def prepare_test(data_path, target):
+    test = pd.read_csv(data_path)
+    features = getFeatures(test, target)
+    return features, test

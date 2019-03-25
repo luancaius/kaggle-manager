@@ -11,6 +11,7 @@ def copyFileTo(src, filename, dst):
 def createDir(folder):
     try:
         if not os.path.exists(folder):
+            print('Creating folder '+folder)
             os.mkdir(folder)
     except OSError:
         print("Creation of the directory %s failed" % folder)
