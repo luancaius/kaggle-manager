@@ -12,4 +12,6 @@ def submission_test_id(inputTest, clf, clfName, features, columnsId, columnTarge
     sub = pd.DataFrame(inputTest[columnsId], columns=[columnsId, columnTarget])
     pred = clf.predict(features)
     sub[columnTarget] = pred
-    sub.to_csv(folder+'/submit_{}.csv'.format(clfName), index=False)
+    filename = folder+'/submit_{}.csv'.format(clfName)
+    sub.to_csv(filename, index=False)
+    return filename

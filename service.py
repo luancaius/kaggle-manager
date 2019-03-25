@@ -34,22 +34,15 @@ class Service:
         self.DownloadData()
         self.CreateScripts()
 
-    def PreparingData(self):
-        print("Preparing data")
+    def ExecuteMain(self):
+        compName = input("Type Kaggle competition name:")
+        self.compName = compName
 
-    def TrainingAndTuning(self):
-        print("Training and Tuning")
-
-    def CreateSubmissionFile(self):
-        print("Create submission")
-
-    def UploadSubmission(self):
-        print("Upload submission")
-        return 10
+    def UploadSubmission(self, filename):
+        command = 'kaggle competitions submission ' + \
+            self.compName + ' -p '+self.path_submission
 
     def RunAndScore(self):
-        self.PreparingData()
-        self.TrainingAndTuning()
-        self.CreateSubmissionFile()
-        score = self.UploadSubmission()
+        filename = ExecuteMain()
+        score = self.UploadSubmission(filename)
         return score
