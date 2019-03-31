@@ -1,16 +1,9 @@
 from service import Service
 
+option = input("Download kaggle data competition: 1\nRun script: 2\n")
+compName = input("Type Kaggle competition name:")
 
-def options(number):
-    service = Service()
-    if number == 1:
-        service.InitCompetition()
-    elif number == 2:
-        score = service.RunAndScore()
-        print(score)
-  
-text = input("What do you want? 1-2")
+service = Service(compName)
+service.main(int(option))
 
-options(int(text))
-
-exit
+exit(0)

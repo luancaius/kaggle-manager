@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-
+import os
 
 def submission_test_full(inputTest, clf, clfName, features, folder):
     submission = pd.DataFrame({"Id": inputTest.Id.values})
@@ -12,6 +12,8 @@ def submission_test_id(inputTest, clf, clfName, features, columnsId, columnTarge
     sub = pd.DataFrame(inputTest[columnsId], columns=[columnsId, columnTarget])
     pred = clf.predict(features)
     sub[columnTarget] = pred
-    filename = folder+'/submit_{}.csv'.format(clfName)
-    sub.to_csv(filename, index=False)
-    return filename
+    filename = '/submit_{}.csv'.format(clfName)
+    filenamePath = folder+ filename
+    sub.to_csv(filenamePath, index=False)
+    absolutePath = os.path.abspath(filenamePath)
+    return absolutePath
