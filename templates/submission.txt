@@ -1,6 +1,9 @@
 import numpy as np
 import pandas as pd
 import os
+import kaggle
+import time
+
 
 def submission_test_full(inputTest, clf, clfName, features, folder):
     submission = pd.DataFrame({"Id": inputTest.Id.values})
@@ -13,7 +16,15 @@ def submission_test_id(inputTest, clf, clfName, features, columnsId, columnTarge
     pred = clf.predict(features)
     sub[columnTarget] = pred
     filename = '/submit_{}.csv'.format(clfName)
-    filenamePath = folder+ filename
+    filenamePath = folder + filename
     sub.to_csv(filenamePath, index=False)
     absolutePath = os.path.abspath(filenamePath)
     return absolutePath
+
+
+def uploadFile(pathSubmission):
+    kaggle.api.competition_submit(pathSubmission, "Sent from kaggle-manager", "@compName@")
+    time.sleep(10)
+    result = kaggle.api.competitions_submissions_list("@compName@")
+    publicScore = result[0]["publicScore"]
+    return publicScore

@@ -19,5 +19,17 @@ def createDir(folder):
         print("Successfully created the directory %s " % folder)
 
 
+def replaceVariableInText(filename, textToReplace, text):
+    f = open(filename, 'r')
+    filedata = f.read()
+    f.close()
+
+    newdata = filedata.replace(textToReplace, text)
+
+    f = open(filename, 'w')
+    f.write(newdata)
+    f.close()
+
+
 def execute(command):
     os.system(command)

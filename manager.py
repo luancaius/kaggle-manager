@@ -1,9 +1,10 @@
 from service import Service
 
-option = input("Download kaggle data competition: 1\nRun script: 2\n")
-compName = input("Type Kaggle competition name:")
+rootPath = '../../Kaggle'
 
-service = Service(compName)
-service.main(int(option))
+compName = input("Type Kaggle competition name to Download:")
+
+service = Service(compName, rootPath)
+service.InitCompetition()
 
 exit(0)

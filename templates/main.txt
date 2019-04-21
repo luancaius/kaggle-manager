@@ -18,7 +18,8 @@ model, score = train.training(features, target)
 print("prepare test")
 features_test, test_input = prep.prepare_test(inputTest, targetInput)
 print("submission")
-submissionFile = sub.submission_test_id(test_input, model,
+pathSubmission = sub.submission_test_id(test_input, model,
                        model.__class__.__name__, features_test, columnId, targetInput, submissionFolder)
-print(submissionFile)
                        
+publicScore = sub.uploadFile(pathSubmission)
+print(publicScore)                       

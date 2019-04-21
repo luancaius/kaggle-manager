@@ -53,4 +53,5 @@ def tuning(clf, features, target, score):
     modelTunned = GridSearchCV(clf, params, cv=4)
     modelTunned.fit(features, target)
     scoreTunned = predict_labels(modelTunned, features, target)
+    print('Tunned score:', scoreTunned, "  old score:", score)
     return modelTunned if scoreTunned > score else clf
