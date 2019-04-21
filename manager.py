@@ -1,10 +1,16 @@
 from service import Service
+import json
+from pprint import pprint
 
 rootPath = '../../Kaggle'
 
-compName = input("Type Kaggle competition name to Download:")
+with open('settings.txt') as f:
+    settings = json.load(f)
 
-service = Service(compName, rootPath)
+compName = input("Type Kaggle competition name to Download:")
+settings["compName"] = compName
+
+service = Service(settings)
 service.InitCompetition()
 
 exit(0)

@@ -1,1 +1,8 @@
-defaultKagglePath: '../../Kaggle'
+{
+   "defaultKagglePath": "../../Kaggle",
+   "user": "youremail@gmail.com",
+   "password": "yourpassword",
+   "smtpServer": "smtp.gmail.com",
+   "port": "465",
+   "destin": "receiver@email.com"   
+}

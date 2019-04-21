@@ -2,6 +2,7 @@ import prepareData as prep
 import training as train
 import tuning as tune
 import submission as sub
+import customEmail as mail
 
 inputTrain = '../data/train.csv'
 inputTest = '../data/test.csv'
@@ -23,3 +24,5 @@ pathSubmission = sub.submission_test_id(test_input, model,
                        
 publicScore = sub.uploadFile(pathSubmission)
 print(publicScore)                       
+
+mail.sendEmail(publicScore)

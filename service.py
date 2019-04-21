@@ -4,12 +4,13 @@ import sys
 
 class Service:
 
-    def __init__(self, compName, rootPath):
-        self.compName = compName
-        self.filesToCopy = ['util.txt', 'main.txt', 'prepareData.txt',
+    def __init__(self, settings):
+        self.settings = settings
+        self.compName = settings["compName"]
+        self.filesToCopy = ['util.txt', 'customEmail.txt', 'main.txt', 'prepareData.txt',
                             'training.txt', 'tuning.txt', 'submission.txt']
         self.templatesFolder = 'templates'
-        self.rootPath = rootPath
+        self.rootPath = settings["defaultKagglePath"]
 
     def DownloadData(self):
         print("Downloading data")
@@ -31,7 +32,17 @@ class Service:
 
     def ReplaceVariables(self):
         submissionFile = self.path_script+'/submission.py'
+        emailFile = self.path_script+'/customEmail.py'
         util.replaceVariableInText(submissionFile, "@compName@", self.compName)
+        util.replaceVariableInText(
+            emailFile, "@user_email@", self.settings["user"])
+        util.replaceVariableInText(
+            emailFile, "@password_email@", self.settings["password"])
+        util.replaceVariableInText(
+            emailFile, "@smtp_server@", self.settings["smtpServer"])
+        util.replaceVariableInText(emailFile, "@port@", self.settings["port"])
+        util.replaceVariableInText(
+            emailFile, "@to_email@", self.settings["destin"])
 
     def InitCompetition(self):
         print('Init competition')
