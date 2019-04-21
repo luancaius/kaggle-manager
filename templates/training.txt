@@ -1,93 +1,22 @@
-from sklearn.model_selection import KFold, StratifiedKFold
-from sklearn.metrics import f1_score
-from sklearn.metrics import accuracy_score, log_loss
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.linear_model import LogisticRegression, SGDClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC, LinearSVC
-from xgboost import XGBClassifier
-import lightgbm
+from classifiers import XGBoost, LightGBM, RandomForest, CatBoost
+import util
 
 
-def predict_labels(clf, features, target):
-    y_pred = clf.predict(features)
-    return f1_score(target, y_pred)
+class Training:
+    def __init__(self, features, target):
+        self.arrayTraining = [
+            XGBoost(), LightGBM(), RandomForest(), CatBoost()]
+        self.features = features
+        self.target = target
 
-
-def train_predict(clf, X_train, y_train, X_test, y_test):
-    clf.fit(X_train, y_train)
-    return predict_labels(clf, X_test, y_test)
-
-
-def split_data(features):
-    n_splits = 5
-    folds = KFold(n_splits=n_splits, random_state=42)
-    return enumerate(folds.split(features))
-
-
-def training(features, target):
-    clfs = [
-        DecisionTreeClassifier(),
-        LogisticRegression(),
-        SGDClassifier(loss="log", max_iter=100),
-        RandomForestClassifier(),
-        XGBClassifier(silent=False,
-                      scale_pos_weight=1,
-                      learning_rate=0.01,
-                      colsample_bytree=0.4,
-                      subsample=0.8,
-                      objective='binary:logistic',
-                      n_estimators=1000,
-                      reg_alpha=0.3,
-                      max_depth=4,
-                      gamma=10)
-    ]
-    score = 0
-    bestScore = 0
-    bestModel = {}
-    for clf in clfs:
-        for fold, (train_idx, test_idx) in split_data(features):
-            X_train = features.iloc[train_idx]
-            y_train = target.iloc[train_idx]
-            X_test = features.iloc[test_idx]
-            y_test = target.iloc[test_idx]
-            score = train_predict(clf, X_train, y_train, X_test, y_test)
-            print(clf.__class__.__name__, " = ", score)
-        if bestScore < score:
-            bestScore = score
-            bestModel = clf
-    print("Choosen ", bestModel.__class__.__name__, " = ", bestScore)
-    return bestModel, bestScore
-
-
-def training_lgm(features, target):
-    param = {
-        'bagging_freq': 5,
-        'bagging_fraction': 0.38,
-        'boost_from_average': 'false',
-        'boost': 'gbdt',
-        'feature_fraction': 0.045,
-        'learning_rate': 0.01,
-        'max_depth': -1,
-        'metric': 'auc',
-        'min_data_in_leaf': 80,
-        'min_sum_hessian_in_leaf': 10.0,
-        'num_leaves': 13,
-        'num_threads': 8,
-        'tree_learner': 'serial',
-        'objective': 'binary',
-        'verbosity': 1
-    }
-    for fold, (train_idx, test_idx) in split_data(features):
-        X_train = features.iloc[train_idx]
-        y_train = target.iloc[train_idx]
-        X_test = features.iloc[test_idx]
-        y_test = target.iloc[test_idx]
-        train_data = lightgbm.Dataset(X_train, label=y_train)
-        test_data = lightgbm.Dataset(X_test, label=y_test)
-        model = lightgbm.train(param,
-                               train_data,
-                               valid_sets=test_data,
-                               num_boost_round=5000,
-                               early_stopping_rounds=100)
-    return model
+    def train(self):
+        bestScore = 0
+        bestModel = {}
+        for clfTraining in self.arrayTraining:
+            model = clfTraining.execute(self.features, self.target)
+            score = util.predict_labels(model, self.features, self.target)
+            print(model.__class__.__name__, " = ", score)
+            if bestScore < score:
+                bestScore = score
+                bestModel = model
+        return bestModel, bestScore

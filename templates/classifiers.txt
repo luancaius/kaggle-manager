@@ -1,0 +1,54 @@
+import util
+from xgboost import XGBClassifier
+import lightgbm
+from sklearn.ensemble import RandomForestClassifier
+from catboost import CatBoostClassifier
+
+
+class RandomForest:
+    def __init__(self):
+        self.clf = RandomForestClassifier()
+
+    def execute(self, features, target):
+        return util.genericTraining(self.clf, features, target)
+
+
+class XGBoost:
+
+    def __init__(self):
+        self.clf = XGBClassifier()
+
+    def execute(self, features, target):
+        return util.genericTraining(self.clf, features, target)
+
+
+class LightGBM:
+    def __init__(self):
+        self.clf = lightgbm.LGBMClassifier(n_estimators=50, silent=True)
+
+    def execute(self, features, target):
+        for fold, (train_idx, test_idx) in util.split_data(features):
+            X_train = features.iloc[train_idx]
+            y_train = target.iloc[train_idx]
+            X_test = features.iloc[test_idx]
+            y_test = target.iloc[test_idx]
+            self.clf.fit(X_train, y_train, eval_set=[
+                         (X_test, y_test)], early_stopping_rounds=5, verbose=False)
+            return self.clf
+
+
+class CatBoost:
+    def __init__(self):
+        self.clf = CatBoostClassifier(iterations=2,
+                                      learning_rate=1,
+                                      depth=2)
+
+    def execute(self, features, target):
+        for fold, (train_idx, test_idx) in util.split_data(features):
+            X_train = features.iloc[train_idx]
+            y_train = target.iloc[train_idx]
+            X_test = features.iloc[test_idx]
+            y_test = target.iloc[test_idx]
+            self.clf.fit(X_train, y_train, eval_set=[
+                         (X_test, y_test)], early_stopping_rounds=5, verbose=False)
+            return self.clf
